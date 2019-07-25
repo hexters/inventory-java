@@ -14,8 +14,8 @@ USE inventory_15111263;
 CREATE TABLE IF NOT EXISTS users (
   id int(11) AUTO_INCREMENT,
   name VARCHAR(50) NOT NULL,
-  email VARCHAR(200) NOT NULL,
-  password VARCHAR(50) NOT NULL,
+  email VARCHAR(200) NULL,
+  password VARCHAR(50) NULL,
   gender VARCHAR(10) NOT NULL,
   address VARCHAR(255) NOT NULL,
   state VARCHAR(100) NULL,
