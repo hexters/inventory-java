@@ -135,9 +135,11 @@ public class User extends Model {
                 switch(result.getString("type")) {
                 
                     case"com.inventory.Model.Admin":
+                        authPanel.mainFrame.setTitle("UAS - Halaman Admin");
                         authPanel.mainFrame.showPanel("adminView");
                         break;
                     case"com.inventory.Model.Employ":
+                        authPanel.mainFrame.setTitle("UAS - Halaman User");
                         authPanel.mainFrame.showPanel("userView");
                         break;
                 }

@@ -27,7 +27,7 @@ public class MainFrameView extends javax.swing.JFrame {
     public MainFrameView() {
         initComponents();
         
-        this.setTitle("UAS - Inventory Control");
+        this.setTitle("UAS - Halaman Login");
         this.setSize(800, 600);
         this.pack();
         panelutama.setLayout(cardLayout);
