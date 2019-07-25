@@ -59,7 +59,7 @@ public class MainFrameView extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setResizable(false);
-        getContentPane().setLayout(new java.awt.GridLayout());
+        getContentPane().setLayout(new java.awt.GridLayout(1, 0));
 
         javax.swing.GroupLayout panelutamaLayout = new javax.swing.GroupLayout(panelutama);
         panelutama.setLayout(panelutamaLayout);
