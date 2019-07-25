@@ -9,6 +9,6 @@ package com.inventory.Model;
  *
  * @author tay
  */
-public class Admin extends User {
+public class Model {
     
 }

@@ -3,6 +3,8 @@
   <persistence-unit name="UAS_ASEP_SAEPULOH_SAHIDIN_15111263_17B_CIDRMPU" transaction-type="RESOURCE_LOCAL">
     <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
     <class>com.inventory.Model.MemberEntity</class>
+    <class>com.inventory.Model.Users</class>
+    <class>com.inventory.Model.Model</class>
     <properties>
       <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/mysql?zeroDateTimeBehavior=convertToNull"/>
       <property name="javax.persistence.jdbc.user" value="root"/>

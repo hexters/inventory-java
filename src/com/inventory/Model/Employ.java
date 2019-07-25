@@ -9,6 +9,6 @@ package com.inventory.Model;
  *
  * @author tay
  */
-public class Employ {
+public class Employ extends User {
     
 }

@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.inventory.Model;
+package com.inventory.View;
 
 /**
  *
  * @author tay
  */
-public class Admin extends User {
+class AuthCOntroller {
     
 }
