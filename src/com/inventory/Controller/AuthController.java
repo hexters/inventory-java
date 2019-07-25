@@ -6,7 +6,10 @@
 package com.inventory.Controller;
 
 import com.inventory.Model.User;
-import com.inventory.View.AuthView;
+import com.inventory.View.AuthPanelView;
+import java.util.Arrays;
+import javax.swing.JDialog;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,23 +17,22 @@ import com.inventory.View.AuthView;
  */
 public class AuthController {
     
-    private AuthView view;
-    private User user;
+    private final AuthPanelView authPanel;
+    private final User user;
     
-    public AuthController() {
-        view = new AuthView();
+    public AuthController(AuthPanelView authPanel) {
+        this.authPanel = authPanel;
         user = new User();
     }
     
     public void login() {
         try {
-            user.setEmail(view.FormEmail().getText().toString());
-            user.setPassword(view.FormPassword().getPassword().toString());
-
-            System.out.println(user.getEmail());
-            System.out.println(user.getPassword());
+            user.setEmail(authPanel.formEmail().getText());
+            user.setPassword(String.valueOf(authPanel.formPassword().getPassword()));
+            user.auth(authPanel);
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            System.out.println("Error : " + e.getMessage());
+            JOptionPane.showMessageDialog(null, e.getMessage(), "Peringatan!", 1);
         }
     }
     

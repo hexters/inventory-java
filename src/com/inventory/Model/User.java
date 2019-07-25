@@ -5,7 +5,13 @@
  */
 package com.inventory.Model;
 
+import com.inventory.View.*;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import javax.swing.*;
 
 /**
  *
@@ -23,20 +29,33 @@ public class User extends Model {
     private String type;
     private Date created_at;
     private Date updated_at;
+    
+    public static final Pattern VALID_EMAIL_ADDRESS_REGEX = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     public void setId(int id) {
         this.id = id;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws java.lang.Exception {
+        if(name.equals("")){
+            throw new Exception("Nama tidak boleh kosong");
+        }
         this.name = name;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws java.lang.Exception {
+        if(email.equals("")){
+            throw new Exception("Email tidak boleh kosong");
+        } else if(!this.emailValidate(email)) {
+            throw new Exception("Format Email salah!");
+        }
         this.email = email;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password) throws java.lang.Exception {
+        if(password.equals("")){
+            throw new Exception("Password tidak boleh kosong");
+        }
         this.password = password;
     }
 
@@ -102,6 +121,37 @@ public class User extends Model {
 
     public Date getUpdated_at() {
         return updated_at;
+    }
+    
+    public void auth(AuthPanelView authPanel) {
+        try {
+            String Query = "SELECT * FROM users WHERE email = ? AND password = ? AND state = 'active';";
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, getEmail());
+            prepare.setString(2, getPassword());
+            result = prepare.executeQuery();
+            while(result.next()) {
+                System.out.println(result.getString("type"));
+                switch(result.getString("type")) {
+                
+                    case"com.inventory.Model.Admin":
+                        authPanel.mainFrame.showPanel("adminView");
+                        break;
+                    case"com.inventory.Model.Employ":
+                        authPanel.mainFrame.showPanel("userView");
+                        break;
+                }
+            }
+            
+        } catch (SQLException e) {
+            
+        }
+        
+    }
+
+    public static boolean emailValidate(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return matcher.find();
     }
     
 }

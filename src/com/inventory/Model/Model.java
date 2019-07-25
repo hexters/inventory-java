@@ -5,10 +5,12 @@
  */
 package com.inventory.Model;
 
+import com.inventory.config.DBConnection;
+
 /**
  *
  * @author tay
  */
-public class Model {
+public class Model extends DBConnection {
     
 }

@@ -84,3 +84,8 @@ CREATE TABLE IF NOT EXISTS transactions (
   updated_at DATETIME NOT NULL,
   PRIMARY KEY (id)
 );
+
+-- Insert data user 
+INSERT INTO users (name, email, password, gender, address, state, type, created_at, updated_at) VALUES 
+("Irwan Riswandi", "user@email.com", "password", "L", "Majalaya", "active", "com.inventory.Model.User", NOW(), NOW()),
+("Asep Saepuloh Sahidin", "admin@email.com", "password", "L", "Pangalengan", "active", "com.inventory.Model.Admin", NOW(), NOW());
