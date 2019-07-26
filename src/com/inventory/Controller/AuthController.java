@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
  *
  * @author tay
  */
-public class AuthController {
+public class AuthController extends Controller {
     
     private final AuthPanelView authPanel;
     private final User user;

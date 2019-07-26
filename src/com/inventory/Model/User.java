@@ -10,7 +10,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.swing.*;
@@ -155,6 +158,120 @@ public class User extends Model {
         
     }
 
+    public User create() throws Exception {
+        
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = formatDate.format(new Date());
+        
+        
+        try {
+            String Query = "INSERT INTO users (name, email, password, gender, state, type, address, created_at, updated_at)";
+            Query += "VALUES(?,?,?,?,?,?,?,?,?);";
+            System.out.println(Query);
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, getName());
+            prepare.setString(2, getEmail());
+            prepare.setString(3, getPassword());
+            prepare.setString(4, getGender());
+            prepare.setString(5, getState());
+            prepare.setString(6, getType());
+            prepare.setString(7, getAddress());
+            prepare.setString(8, date);
+            prepare.setString(9, date);
+            prepare.executeUpdate();
+            
+            return this;
+            
+        } catch (SQLException e) {
+            System.out.println("Error when created user " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+        
+    }
+    
+    public User update() throws Exception {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = formatDate.format(new Date());
+        try {
+            String Query = "UPDATE users SET name =?, email =?, password =?, gender =?, state =?, type =?, address =?, updated_at =? WHERE id =?;";
+            System.out.println(Query);
+            System.out.println("ID User " + getId());
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, getName());
+            prepare.setString(2, getEmail());
+            prepare.setString(3, getPassword());
+            prepare.setString(4, getGender());
+            prepare.setString(5, getState());
+            prepare.setString(6, getType());
+            prepare.setString(7, getAddress());
+            prepare.setString(8, date);
+            prepare.setInt(9, getId());
+            prepare.executeUpdate();
+            
+            return this;
+            
+        } catch (SQLException e) {
+            System.out.println("Error when updated user " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+        
+    }
+    
+    public User inactivated() throws Exception {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = formatDate.format(new Date());
+        try {
+            String Query = "UPDATE users SET state =?, updated_at =? WHERE id =?;";
+            System.out.println(Query);
+            System.out.println("ID User " + getId());
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, "inactive");
+            prepare.setString(2, date);
+            prepare.setInt(3, getId());
+            prepare.executeUpdate();
+            
+            return this;
+            
+        } catch (SQLException e) {
+            System.out.println("Error when updated user " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+        
+    }
+    
+    public ArrayList<User> getAll() {
+        
+        ArrayList<User> lists = new ArrayList<>();
+        try {
+            String Query = "SELECT * FROM users WHERE state = 'active'";
+            PreparedStatement prepare = db.prepareStatement(Query);
+            result = prepare.executeQuery();
+            
+            while(result.next()) {
+                try {
+                    User user = new User();
+                    user.setId(result.getInt("id"));
+                    user.setName(result.getString("name"));
+                    user.setEmail(result.getString("email"));
+                    user.setPassword(result.getString("password"));
+                    user.setGender(result.getString("gender"));
+                    user.setState(result.getString("state"));
+                    user.setType(result.getString("type"));
+                    user.setAddress(result.getString("address"));
+                    lists.add(user);
+                } catch (Exception ex) {
+                    System.out.println("Error add select users " + ex.getMessage());
+                }
+            }
+            return lists;
+        } catch (SQLException e) {
+            System.out.println("Error select users " + e.getMessage());
+            return null;
+        }
+    }
+    
+    
+    
     public static boolean emailValidate(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
         return matcher.find();
