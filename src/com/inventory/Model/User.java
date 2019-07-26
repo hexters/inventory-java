@@ -6,6 +6,8 @@
 package com.inventory.Model;
 
 import com.inventory.View.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.*;
@@ -125,28 +127,30 @@ public class User extends Model {
     
     public void auth(AuthPanelView authPanel) {
         try {
+            
             String Query = "SELECT * FROM users WHERE email = ? AND password = ? AND state = 'active';";
             PreparedStatement prepare = db.prepareStatement(Query);
             prepare.setString(1, getEmail());
             prepare.setString(2, getPassword());
             result = prepare.executeQuery();
+            
+            
             while(result.next()) {
                 System.out.println(result.getString("type"));
                 switch(result.getString("type")) {
-                
-                    case"com.inventory.Model.Admin":
+                    case "com.inventory.Model.Admin":
                         authPanel.mainFrame.setTitle("UAS - Halaman Admin");
                         authPanel.mainFrame.showPanel("adminView");
                         break;
-                    case"com.inventory.Model.Employ":
-                        authPanel.mainFrame.setTitle("UAS - Halaman User");
+                    case "com.inventory.Model.User":
+                        authPanel.mainFrame.setTitle("UAS - Halaman User");                        
                         authPanel.mainFrame.showPanel("userView");
                         break;
                 }
             }
             
         } catch (SQLException e) {
-            
+            System.out.println("Error User : " + e.getMessage());
         }
         
     }

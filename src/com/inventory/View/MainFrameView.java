@@ -7,19 +7,31 @@ package com.inventory.View;
 
 import java.awt.BorderLayout;
 import java.awt.CardLayout;
+import java.awt.MenuBar;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import javax.swing.*;
 
 /**
  *
  * @author Hexters
  */
-public class MainFrameView extends javax.swing.JFrame {
+public class MainFrameView extends javax.swing.JFrame implements ActionListener {
 
     private final JPanel 
             authView,
             adminView,
             userView;
-    private CardLayout cardLayout = new CardLayout();
+    private final CardLayout cardLayout = new CardLayout();
+    
+    public final JMenu file;
+    public final JMenu master;
+    public final JMenu transaksi;
+    public final JMenu window;
+    public final JMenuItem exit;
+    public final JMenuItem about;
+    
+    public JMenuBar menuBar;
     
     /**
      * Creates new form AdminFrameView
@@ -28,8 +40,8 @@ public class MainFrameView extends javax.swing.JFrame {
         initComponents();
         
         this.setTitle("UAS - Halaman Login");
-        this.setSize(800, 600);
-        this.pack();
+        this.setExtendedState(this.MAXIMIZED_BOTH); 
+        this.setUndecorated(true);
         panelutama.setLayout(cardLayout);
         
         authView = new AuthPanelView(this);
@@ -39,9 +51,32 @@ public class MainFrameView extends javax.swing.JFrame {
         panelutama.add(authView, "authView");
         panelutama.add(adminView, "adminView");
         panelutama.add(userView, "userView");
+        
+        
+        menuBar = new JMenuBar();
+            
+        file = new JMenu("File");
+        window = new JMenu("Window");
+        master = new JMenu("Master");
+        transaksi = new JMenu("Transaksi");
+
+        exit = new JMenuItem("Exit");
+        about = new JMenuItem("About");
+
+        file.add(exit);
+        window.add(about);
+        
+        menuBar.add(file);
+        menuBar.add(window);
+       
+        this.setJMenuBar(menuBar);
+        
+        exit.addActionListener(this);
+        
     }
     
     public void showPanel(String panelIdentifier) {
+        System.out.println(panelIdentifier);
         CardLayout cardLyout = (CardLayout) panelutama.getLayout();
         cardLyout.show(panelutama, panelIdentifier);
     }
@@ -82,4 +117,13 @@ public class MainFrameView extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JPanel panelutama;
     // End of variables declaration//GEN-END:variables
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        System.out.println(e.getSource());
+        if(e.getSource() == exit) {
+            System.exit(0);
+        }
+    }
+
 }
