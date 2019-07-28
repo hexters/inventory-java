@@ -5,6 +5,9 @@
  */
 package com.inventory.Model;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -102,5 +105,66 @@ public class Transaction extends Model {
 
     public Date getUpdated_at() {
         return updated_at;
+    }
+    
+    public void create() throws Exception {
+        
+        try {
+            
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = formatDate.format(new Date());
+        
+            String Query = "INSERT INTO transactions(product_id, supplier_id, user_id, qty_in, qty_out, state, created_at, updated_at)";
+            Query += "VALUES(?,?,?,?,?, 'active', NOW(),NOW());";
+            
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setInt(1, getProduct_id());
+            prepare.setInt(2, getSupplier_id());
+            prepare.setInt(3, getUser_id());
+            prepare.setInt(4, getQty_in());
+            prepare.setInt(5, getQty_out());
+            prepare.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error when create transactions " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+    
+    public void update() throws Exception {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = formatDate.format(new Date());
+        try {
+            String Query = "UPDATE transactions SET product_id=?, supplier_id=?, user_id=?, qty_in=?, qty_out=?, updated_at = NOW() WHERE id =?;";
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setInt(1, getProduct_id());
+            prepare.setInt(2, getSupplier_id());
+            prepare.setInt(3, getUser_id());
+            prepare.setInt(4, getQty_in());
+            prepare.setInt(5, getQty_out());
+            prepare.setInt(6, getId());
+            prepare.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error when updated transactions " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+        
+    }
+    
+    public void inactivated() throws Exception {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = formatDate.format(new Date());
+        try {
+            String Query = "UPDATE transactions SET state =?, updated_at = NOW() WHERE id =?;";
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, "inactive");
+            prepare.setInt(2, getId());
+            prepare.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error when updated transactions " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+        
     }
 }

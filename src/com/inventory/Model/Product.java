@@ -5,6 +5,9 @@
  */
 package com.inventory.Model;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -103,6 +106,95 @@ public class Product extends Model {
         this.updated_at = updated_at;
     }
     
+    public void create() throws Exception {
+        
+        try {
+            
+            SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            String date = formatDate.format(new Date());
+        
+            String Query = "INSERT INTO products(name, sku, price, description, product_type_id, state, created_at, updated_at)";
+            Query += "VALUES(?,?,?,?,?,'active', NOW(),NOW());";
+            
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, getName());
+            prepare.setString(2, getSku());
+            prepare.setFloat(3, getPrice());
+            prepare.setString(4, getDescription());
+            prepare.setInt(5, getProduct_type_id());
+            prepare.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error when create product " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+    }
+    
+    public void update() throws Exception {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = formatDate.format(new Date());
+        try {
+            String Query = "UPDATE products SET name=?, sku=?, price=?, description=?, product_type_id=?, updated_at =? WHERE id =?;";
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, getName());
+            prepare.setString(2, getSku());
+            prepare.setFloat(3, getPrice());
+            prepare.setString(4, getDescription());
+            prepare.setInt(5, getProduct_type_id());
+            prepare.setInt(6, getId());
+            prepare.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println("Error when updated product " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+        
+    }
+    
+    public void inactivated() throws Exception {
+        SimpleDateFormat formatDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String date = formatDate.format(new Date());
+        try {
+            String Query = "UPDATE products SET state =?, updated_at =? WHERE id =?;";
+            PreparedStatement prepare = db.prepareStatement(Query);
+            prepare.setString(1, "inactive");
+            prepare.setString(2, date);
+            prepare.setInt(3, getId());
+            prepare.executeUpdate();
+            
+        } catch (SQLException e) {
+            System.out.println("Error when updated product " + e.getMessage());
+            throw new Exception(e.getMessage());
+        }
+        
+    }
     
     
+    public ArrayList<Product> getAll() {
+
+        ArrayList<Product> lists = new ArrayList<>();
+        try {
+            String Query = "SELECT * FROM products WHERE state = 'active'";
+            PreparedStatement prepare = db.prepareStatement(Query);
+            result = prepare.executeQuery();
+
+            while(result.next()) {
+                try {
+                    Product item = new Product();
+                    item.setId(result.getInt("id"));
+                    item.setName(result.getString("name"));
+                    item.setSku(result.getString("sku"));
+                    item.setPrice(Float.parseFloat(result.getString("price")));
+                    item.setDescription(result.getString("description"));
+                    item.setProduct_type_id(Integer.parseInt(result.getString("product_type_id")));
+                    lists.add(item);
+                } catch (Exception ex) {
+                    System.out.println("Error add select products " + ex.getMessage());
+                }
+            }
+            return lists;
+        } catch (SQLException e) {
+            System.out.println("Error select products " + e.getMessage());
+            return null;
+        }
+    }
 }

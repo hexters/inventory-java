@@ -115,6 +115,7 @@ public class UserController extends Controller {
             user.setAddress(view.getValueAlamat().getText());
             User result = user.create();
             view.clean();
+            table.addRow(user);
             
             JOptionPane.showMessageDialog(null, "Karyawan berhasil ditambahkan", "Berhasil", JOptionPane.PLAIN_MESSAGE);
             
